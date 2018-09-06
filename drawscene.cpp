@@ -1,7 +1,8 @@
 #include "drawscene.h"
 
-drawScene::drawScene(int rowsCount, int colsCount, int width, int height)
+drawScene::drawScene(int rowsCount, int colsCount, int width, int height, QColor color)
 {
+    rectColor = color;
     newData = new pictureData(rowsCount * colsCount);
     rows = rowsCount;
     cols = colsCount;
@@ -26,7 +27,7 @@ void drawScene::mousePressEvent(QGraphicsSceneMouseEvent *event){
     int y = event->scenePos().y();
     if(x < cols*cellWidth && x > 0 && y < rows*cellHeight && y > 0){
         newData->insertElem(1, floor(y/cellHeight)*cols + floor(x/cellWidth));
-        addRect(floor(x/cellWidth)*cellWidth, floor(y/cellHeight)*cellHeight, cellWidth, cellHeight, QPen(Qt::NoPen),QBrush(Qt::red));
+        addRect(floor(x/cellWidth)*cellWidth, floor(y/cellHeight)*cellHeight, cellWidth, cellHeight, QPen(Qt::NoPen),QBrush(rectColor));
     }
 }
 
@@ -35,10 +36,14 @@ void drawScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     int y = event->scenePos().y();
     if(x < cols*cellWidth && x > 0 && y < rows*cellHeight && y > 0){
         newData->insertElem(1, floor(y/cellHeight)*cols + floor(x/cellWidth));
-        addRect(floor(x/cellWidth)*cellWidth, floor(y/cellHeight)*cellHeight, cellWidth, cellHeight, QPen(Qt::NoPen),QBrush(Qt::red));
+        addRect(floor(x/cellWidth)*cellWidth, floor(y/cellHeight)*cellHeight, cellWidth, cellHeight, QPen(Qt::NoPen),QBrush(rectColor));
     }
 }
 
 std::vector<double> drawScene::getPicture(){
     return newData->getData();
+}
+
+void drawScene::setColor(QColor color){
+    rectColor = color;
 }
