@@ -10,6 +10,9 @@
 #include <QStackedWidget>
 #include <QGroupBox>
 #include <QColorDialog>
+#include <QComboBox>
+#include <QVBoxLayout>
+#include <QScrollArea>
 
 #include "drawscene.h"
 #include "picturedata.h"
@@ -32,8 +35,18 @@ private slots:
     void selectColor();
     void handleYes();
     void handleNo();
+    void createNeuralLayers();
 
 private:
+    QVBoxLayout* setNeuralCountField;
+    QPushButton* createLayers;
+    QLineEdit* layersCount;
+    QLabel* layersCountLabel;
+    QGroupBox* createNeuralBox;
+    QLabel* currentNeuralNetwork;
+    QLabel* currentNeuralNetworkLabel;
+    QComboBox* chooseNeural;
+    QLabel* chooseNeuralLabel;
     QWidget* currentColor;
     QPushButton* chooseColor;
     QGroupBox* resultBox;

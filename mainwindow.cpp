@@ -12,6 +12,15 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget->addWidget(teachWidget);
     stackedWidget->addWidget(statisticsWidget);
 
+    currentNeuralNetworkLabel = new QLabel(createNeuralWidget);
+    currentNeuralNetwork = new QLabel(createNeuralWidget);
+    createNeuralBox = new QGroupBox(createNeuralWidget);
+
+    layersCountLabel = new QLabel(createNeuralBox);
+    layersCount = new QLineEdit(createNeuralBox);
+    createLayers = new QPushButton(createNeuralBox);
+    setNeuralCountField = new QVBoxLayout(createNeuralBox);
+
     navigation = new QGroupBox(this);
     toCreatePage = new QPushButton(navigation);
     toTeachPage = new QPushButton(navigation);
@@ -20,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
     setSceneBox = new QGroupBox(teachWidget);
     view = new QGraphicsView(teachWidget);
     resultBox = new QGroupBox(teachWidget);
+    chooseNeuralLabel = new QLabel(teachWidget);
+    chooseNeural = new QComboBox(teachWidget);
 
     handleButton = new QPushButton(resultBox);
     neuralResult = new QLineEdit(resultBox);
@@ -35,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     chooseColor = new QPushButton(setSceneBox);
     currentColor = new QWidget(setSceneBox);
 
-    QMainWindow::setGeometry(50, 50, 710, 520);
+    QMainWindow::setGeometry(50, 50, 710, 570);
     sizeXLabel->setGeometry(10, 20, 120, 30);
     sizeYLabel->setGeometry(10, 60, 120, 30);
     sizeX->setGeometry(140, 20, 30, 30);
@@ -56,6 +67,15 @@ MainWindow::MainWindow(QWidget *parent)
     yes->setGeometry(10, 100, 80, 30);
     no->setGeometry(90, 100, 80, 30);
     currentColor->setGeometry(140, 160, 30, 30);
+    chooseNeuralLabel->setGeometry(10, 520, 70, 30);
+    chooseNeural->setGeometry(90, 520, 200, 30);
+    currentNeuralNetworkLabel->setGeometry(10, 10, 130, 30);
+    currentNeuralNetwork->setGeometry(150, 10, 300, 30);
+    createNeuralBox->setGeometry(10, 50, 300, 300);
+    layersCountLabel->setGeometry(10, 20, 100, 30);
+    layersCount->setGeometry(120, 20, 30, 30);
+    createLayers->setGeometry(160, 20, 100, 30);
+    setNeuralCountField->setGeometry(QRect(10, 60, 50, 50));
 
     neuralResult->setReadOnly(true);
     currentColor->setStyleSheet(QString("background-color:").append(QColor(Qt::black).name()).append(";"));
@@ -74,9 +94,15 @@ MainWindow::MainWindow(QWidget *parent)
     chooseColor->setText("Выбрать цвет");
     yes->setText("Да");
     no->setText("Нет");
+    chooseNeuralLabel->setText("Выбрать сеть:");
+    currentNeuralNetworkLabel->setText("Текущая нейронная сеть:");
+    createNeuralBox->setTitle("Создать нейронную сеть");
+    layersCountLabel->setText("Количество слоёв:");
+    createLayers->setText("Создать");
 
     sizeX->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,3}"), this));
     sizeY->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,3}"), this));
+    layersCount->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,2}"), this));
 
     connect(applySize, SIGNAL(released()), this, SLOT(createScene()));
     connect(handleButton, SIGNAL(released()), this, SLOT(handlePicture()));
@@ -87,6 +113,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(chooseColor, SIGNAL(released()), this, SLOT(selectColor()));
     connect(yes, SIGNAL(released()), this, SLOT(handleYes()));
     connect(no, SIGNAL(released()), this, SLOT(handleNo()));
+    connect(createLayers, SIGNAL(released()), this, SLOT(createNeuralLayers()));
 
     stackedWidget->setCurrentWidget(teachWidget);
 }
@@ -141,6 +168,14 @@ void MainWindow::selectColor() {
         newScene->setColor(color);
     }
     currentColor->setStyleSheet(QString("background-color:").append(color.name()).append(";"));
+}
+
+void MainWindow::createNeuralLayers(){
+    for(int i = 0; i < layersCount->text().toInt(); i++){
+        QPushButton* newButton = new QPushButton("кнопочка");
+        newButton->setGeometry(10, 10, 100, 30);
+        setNeuralCountField->addWidget(newButton);
+    }
 }
 
 void MainWindow::handleYes(){
